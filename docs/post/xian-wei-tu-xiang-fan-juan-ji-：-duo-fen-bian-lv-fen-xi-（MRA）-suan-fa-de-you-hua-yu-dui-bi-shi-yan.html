@@ -78,7 +78,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h2>1. 实验背景与动机</h2>
-<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-30935057f1ca37a6fc85fff82ea2df2d" id="user-content-fnref-1-30935057f1ca37a6fc85fff82ea2df2d" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
+<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-44ef28e5cfe41bc573ae7a23e450996a" id="user-content-fnref-1-44ef28e5cfe41bc573ae7a23e450996a" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
 <p>为了实现这一目标，我修改了基于 FISTA 算法的代码，使其能够自适应不同变换的数据结构，实现了任意两种变换的组合，并支持批量化测试。</p>
 <h2>2. 单一变换的去噪与超分辨效果验证</h2>
 <p>使用29%光照强度下U2OS细胞内肌动蛋白的SIM图像做对比。保真项+单正则化约束<br>
@@ -97,12 +97,22 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li><strong>Framelet、Curvelet 与 UWT</strong>：均比原始图像展现出更高的分辨率和对比度（例如，在肌动蛋白的线轮廓分析中，能清晰地将一个波峰分辨为两个）。</li>
 </ul>
 <h2>3. 针对 Shearlet 变换的阈值权重优化</h2>
-<p>在实验中我发现，当 Shearlet 进行高层数（如 6 层）分解时，高频细节往往会被过度削弱。这与 FISTA 的阈值设计有关。原代码中，Lipschitz 常数 $L$ 仅与系统的点扩散函数 (PSF) 相关：</p>
+<p>在单单一变换的去噪与超分辨效果对比实验中，4层的shearlet（紫色）对两条肌动蛋白的区分效果不好，后续对比了3层、4层、6层的sheearlet效果。三层时间更短，高频细节更多，降噪相比于4层更差<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7c0bc048-1044-4820-9af8-71e9028c0908"><img width="1000" alt="Image" src="https://github.com/user-attachments/assets/7c0bc048-1044-4820-9af8-71e9028c0908" style="max-width: 100%;"></a><br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/cbc93d8e-7c08-47b7-a28b-10fb85265778"><img width="600" alt="Image" src="https://github.com/user-attachments/assets/cbc93d8e-7c08-47b7-a28b-10fb85265778" style="max-width: 100%;"></a><br>
+在实验中我发现，当 Shearlet 进行高层数（如 6 层）分解时，高频细节往往会被过度削弱。这与 FISTA 的阈值设计有关。原代码中，Lipschitz 常数 $L$ 仅与系统的点扩散函数 (PSF) 相关：</p>
 <p>$$L=2\max(|S_{\text{big}}|^2)$$</p>
 <p>算法在所有 Shearlet 子带上使用了统一的软阈值 $\theta=\lambda_2/L$。当层数增加时，变换系数被拆分到更多子带，绝对值变小，导致大量高频系数在统一阈值下被直接抹去。</p>
-<p><strong>改进策略</strong>：我引入了与尺度相关的加权阈值策略（如线性权重或 Log 权重）：</p>
-<p>$$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$</p>
+<p><strong>改进策略</strong>：我引入了与尺度相关的加权阈值策略（如线性权重或 Log 权重）：<br>
+$$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$<br>
+六层shearlet不同加权阈值策略对比。<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/66788248-5d78-4d6f-8bd8-3b8b9d1f5762"><img width="1000" alt="Image" src="https://github.com/user-attachments/assets/66788248-5d78-4d6f-8bd8-3b8b9d1f5762" style="max-width: 100%;"></a><br>
+四层shearlet不同加权阈值策略对比。<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/9fe8a5a9-f8e6-4103-8a95-8cc29f6b7243"><img width="1000" alt="Image" src="https://github.com/user-attachments/assets/9fe8a5a9-f8e6-4103-8a95-8cc29f6b7243" style="max-width: 100%;"></a><br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7da86403-48ad-4eef-96a8-f68adbcf4d49"><img width="600" alt="Image" src="https://github.com/user-attachments/assets/7da86403-48ad-4eef-96a8-f68adbcf4d49" style="max-width: 100%;"></a></p>
 <p>实验结果表明，该改进有效恢复了高频结构信息，使部分方法的定量指标（PSNR、SBR）得到显著提升。</p>
+<p>使用4层shearlet+curvelet和六层shearlet+curvelet的效果优于原方法<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f"><img width="2000" height="2000" alt="Image" src="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f" style="max-width: 100%; height: auto; max-height: 2000px;"></a></p>
 <h2>4. 混合多分辨率变换对比测试</h2>
 <p>我进一步在不同信噪比条件下测试了双变换组合的效果：</p>
 <h3>常规条件（20% SIM）</h3>
@@ -122,8 +132,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <h2>参考资料</h2>
 <section data-footnotes="" class="footnotes"><h2 id="footnote-label" class="sr-only">Footnotes</h2>
 <ol>
-<li id="user-content-fn-1-30935057f1ca37a6fc85fff82ea2df2d">
-<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-30935057f1ca37a6fc85fff82ea2df2d" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+<li id="user-content-fn-1-44ef28e5cfe41bc573ae7a23e450996a">
+<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-44ef28e5cfe41bc573ae7a23e450996a" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
 </li>
 </ol>
 </section></div>

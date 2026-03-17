@@ -21,10 +21,10 @@
 * **Shearlet**：去噪能力最为显著，但计算复杂度高，运行时间较长。
 * **Framelet、Curvelet 与 UWT**：均比原始图像展现出更高的分辨率和对比度（例如，在肌动蛋白的线轮廓分析中，能清晰地将一个波峰分辨为两个）。
 
-
-
 ## 3. 针对 Shearlet 变换的阈值权重优化
-
+在单单一变换的去噪与超分辨效果对比实验中，4层的shearlet（紫色）对两条肌动蛋白的区分效果不好，后续对比了3层、4层、6层的sheearlet效果。三层时间更短，高频细节更多，降噪相比于4层更差
+<img width="1000" alt="Image" src="https://github.com/user-attachments/assets/7c0bc048-1044-4820-9af8-71e9028c0908" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/cbc93d8e-7c08-47b7-a28b-10fb85265778" />
 在实验中我发现，当 Shearlet 进行高层数（如 6 层）分解时，高频细节往往会被过度削弱。这与 FISTA 的阈值设计有关。原代码中，Lipschitz 常数 $L$ 仅与系统的点扩散函数 (PSF) 相关：
 
 $$L=2\max(|S_{\text{big}}|^2)$$
@@ -32,10 +32,17 @@ $$L=2\max(|S_{\text{big}}|^2)$$
 算法在所有 Shearlet 子带上使用了统一的软阈值 $\theta=\lambda_2/L$。当层数增加时，变换系数被拆分到更多子带，绝对值变小，导致大量高频系数在统一阈值下被直接抹去。
 
 **改进策略**：我引入了与尺度相关的加权阈值策略（如线性权重或 Log 权重）：
-
 $$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$
+六层shearlet不同加权阈值策略对比。
+<img width="1000" alt="Image" src="https://github.com/user-attachments/assets/66788248-5d78-4d6f-8bd8-3b8b9d1f5762" />
+四层shearlet不同加权阈值策略对比。
+<img width="1000" alt="Image" src="https://github.com/user-attachments/assets/9fe8a5a9-f8e6-4103-8a95-8cc29f6b7243" />
+<img width="600" alt="Image" src="https://github.com/user-attachments/assets/7da86403-48ad-4eef-96a8-f68adbcf4d49" />
 
 实验结果表明，该改进有效恢复了高频结构信息，使部分方法的定量指标（PSNR、SBR）得到显著提升。
+
+使用4层shearlet+curvelet和六层shearlet+curvelet的效果优于原方法
+<img width="3312" height="2344" alt="Image" src="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f" />
 
 ## 4. 混合多分辨率变换对比测试
 
