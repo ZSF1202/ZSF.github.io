@@ -78,7 +78,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h2>1. 实验背景与动机</h2>
-<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-f26fa2e3609902e18c022f0eb64ad781" id="user-content-fnref-1-f26fa2e3609902e18c022f0eb64ad781" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
+<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-0bc7c7aded9b1bf7c060faf743337e51" id="user-content-fnref-1-0bc7c7aded9b1bf7c060faf743337e51" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
 <p>为了实现这一目标，我修改了基于 FISTA 算法的代码，使其能够自适应不同变换的数据结构，实现了任意两种变换的组合，并支持批量化测试。</p>
 <h2>2. 单一变换的去噪与超分辨效果验证</h2>
 <p>使用29%光照强度下U2OS细胞内肌动蛋白的SIM图像做对比。保真项+单正则化约束<br>
@@ -132,8 +132,8 @@ $$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$<br
 <h2>参考资料</h2>
 <section data-footnotes="" class="footnotes"><h2 id="footnote-label" class="sr-only">Footnotes</h2>
 <ol>
-<li id="user-content-fn-1-f26fa2e3609902e18c022f0eb64ad781">
-<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-f26fa2e3609902e18c022f0eb64ad781" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+<li id="user-content-fn-1-0bc7c7aded9b1bf7c060faf743337e51">
+<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-0bc7c7aded9b1bf7c060faf743337e51" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
 </li>
 </ol>
 </section></div>
