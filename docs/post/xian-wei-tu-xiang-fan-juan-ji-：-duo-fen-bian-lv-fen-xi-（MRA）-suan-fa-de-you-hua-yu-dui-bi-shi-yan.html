@@ -78,7 +78,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
     <div id="content">
 <div class="markdown-body" id="postBody"><h2>1. 实验背景与动机</h2>
-<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-71d73bfe114e4d26341f3fa5165fcbe3" id="user-content-fnref-1-71d73bfe114e4d26341f3fa5165fcbe3" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
+<p>在三维荧光显微成像中，为了提升图像的分辨率和对比度，多分辨率分析（MRA）的反卷积方法展现出了巨大潜力<sup><a href="#user-content-fn-1-dd2323488d860d37600fb97cbddeac8a" id="user-content-fnref-1-dd2323488d860d37600fb97cbddeac8a" data-footnote-ref="" aria-describedby="footnote-label">1</a></sup>。本实验在基于最优稀疏表示的 Framelet + Curvelet 多分辨率去卷积方法的基础上尝试引入 UWT（非下采样小波变换）和 Shearlet（剪切波变换）等不同的多尺度、多方向稀疏表示方式。</p>
 <p>为了实现这一目标，我修改了基于 FISTA 算法的代码，使其能够自适应不同变换的数据结构，实现了任意两种变换的组合，并支持批量化测试。</p>
 <h2>2. 单一变换的去噪与超分辨效果验证</h2>
 <p>使用29%光照强度下U2OS细胞内肌动蛋白的SIM图像做对比。保真项+单正则化约束<br>
@@ -112,7 +112,7 @@ $$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$<br
 <a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7da86403-48ad-4eef-96a8-f68adbcf4d49"><img width="600" alt="Image" src="https://github.com/user-attachments/assets/7da86403-48ad-4eef-96a8-f68adbcf4d49" style="max-width: 100%;"></a></p>
 <p>实验结果表明，该改进有效恢复了高频结构信息，使部分方法的定量指标（PSNR、SBR）得到显著提升。</p>
 <p>使用4层shearlet+curvelet和六层shearlet+curvelet的效果优于原方法<br>
-<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f"><img width="2000" height="2000" alt="Image" src="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f" style="max-width: 100%; height: auto; max-height: 2000px;; aspect-ratio: 2000 / 2000; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f"><img width="2000" height="1415" alt="Image" src="https://github.com/user-attachments/assets/8df498be-b773-4de6-af3f-267ff3e55d8f" style="max-width: 100%; height: auto; max-height: 1415px;; aspect-ratio: 2000 / 1415; background-color: var(--bgColor-muted); border-radius: 6px; display: block" class="js-gh-image-fallback"></a></p>
 <h2>4. 混合多分辨率变换对比测试</h2>
 <p>我进一步在不同信噪比条件下测试了双变换组合的效果：</p>
 <h3>常规条件（20% SIM）</h3>
@@ -132,8 +132,8 @@ $$D_{\text{th}}=|\text{tmp}|-\frac{\lambda_2}{L}\times\text{scaleWeight}(j)$$<br
 <h2>参考资料</h2>
 <section data-footnotes="" class="footnotes"><h2 id="footnote-label" class="sr-only">Footnotes</h2>
 <ol>
-<li id="user-content-fn-1-71d73bfe114e4d26341f3fa5165fcbe3">
-<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-71d73bfe114e4d26341f3fa5165fcbe3" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+<li id="user-content-fn-1-dd2323488d860d37600fb97cbddeac8a">
+<p>Mandracchia, B., Liu, W., Hua, X., Forghani, P., Lee, S., Hou, J., Nie, S., Xu, C., &amp; Jia, S. (2023). <a href="https://doi.org/10.1126/sciadv.adg9245">Optimal sparsity allows reliable system-aware restoration of fluorescence microscopy images</a>. <em>Science Advances</em>, 9(35), eadg9245. <a href="#user-content-fnref-1-dd2323488d860d37600fb97cbddeac8a" data-footnote-backref="" aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
 </li>
 </ol>
 </section></div>
